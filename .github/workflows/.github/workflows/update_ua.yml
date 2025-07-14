@@ -1,0 +1,30 @@
+name: Auto-Update UA Data
+on:
+  schedule:
+    - cron: '0 12 * * *'  # দৈনিক বাংলাদেশ সময় ১২টায়
+  push:
+    branches: [ main ]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Generate UA Variants
+        run: |
+          echo '{
+            "last_updated": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+            "ua_samples": [
+              "Mozilla/5.0 (iPhone16,1; CPU iPhone OS 17_$((RANDOM%5+1)))",
+              "Mozilla/5.0 (Linux; Android 13; SM-S918U) Chrome/13$((RANDOM%10)).0"
+            ]
+          }' > ua_variants.json
+          
+      - name: Commit Changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Auto-update UA variants [$(date +%d-%m-%Y)]"
+          git push
