@@ -1,8 +1,17 @@
 {
   "iPhone": [
-    {"model": "iPhone16,1", "name": "iPhone 15 Pro", "os": "iOS 17.1"}
+    {"model": "iPhone16,1", "name": "iPhone 15 Pro", "os": "iOS 17.1"},
+    {"model": "iPhone15,5", "name": "iPhone 14 Pro Max", "os": "iOS 16.6"},
+    {"model": "iPhone14,5", "name": "iPhone 13", "os": "iOS 16.5"}
   ],
   "Android": [
-    {"model": "SM-S918U", "name": "Galaxy S23 Ultra", "os": "Android 13"}
+    {"model": "SM-S918U", "name": "Galaxy S23 Ultra", "os": "Android 13"},
+    {"model": "SM-A146U", "name": "Galaxy A14 5G", "os": "Android 13"},
+    {"model": "SM-F731U", "name": "Galaxy Z Flip 5", "os": "Android 13"},
+    {"model": "Pixel 8 Pro", "name": "Pixel 8 Pro", "os": "Android 14"},
+    {"model": "Pixel 7a", "name": "Pixel 7a", "os": "Android 13"},
+    {"model": "XT2315-4", "name": "Moto G Power 5G", "os": "Android 13"},
+    {"model": "CPH2451", "name": "OnePlus 11 5G", "os": "Android 13"},
+    {"model": "LM-G900TM", "name": "LG Velvet 5G", "os": "Android 12"}
   ]
 }
