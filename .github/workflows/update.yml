@@ -1,0 +1,25 @@
+name: UA Auto-Updater
+on:
+  workflow_dispatch:  # ম্যানুয়াল রানের জন্য
+  schedule:
+    - cron: '0 12 * * *'  # দৈনিক ১২টায়
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo '{
+            "timestamp": "$(date)",
+            "user_agents": [
+              "Mozilla/5.0 (iPhone16,1; CPU iPhone OS 17_$((RANDOM%5+1)))",
+              "Mozilla/5.0 (Linux; Android 13; SM-S918U)"
+            ]
+          }' > ua_data.json
+          
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Auto-update UA: $(date)"
+          git push
