@@ -1,8 +1,8 @@
 {
-    "iPhone": [
-        {"model": "iPhone16,1", "name": "iPhone 15 Pro", "os": "iOS 17.1"}
-    ],
-    "Android": [
-        {"model": "SM-S918U", "name": "Galaxy S23 Ultra", "os": "Android 13"}
-    ]
+  "iPhone": [
+    {"model": "iPhone16,1", "name": "iPhone 15 Pro", "os": "iOS 17.1"}
+  ],
+  "Android": [
+    {"model": "SM-S918U", "name": "Galaxy S23 Ultra", "os": "Android 13"}
+  ]
 }
