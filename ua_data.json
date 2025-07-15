@@ -1,0 +1,7 @@
+{
+  "timestamp": "$(date)",
+  "user_agents": [
+    "Mozilla/5.0 (iPhone16,1; CPU iPhone OS 17_$((RANDOM%5+1)))",
+    "Mozilla/5.0 (Linux; Android 13; SM-S918U)"
+  ]
+}
