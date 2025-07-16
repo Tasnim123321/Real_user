@@ -14,11 +14,15 @@ def load_devices_from_github():
         pass
     return None
 
+# 🔥 এখানে শুধু ডিভাইস লিস্ট আপডেট করেছি (বাকি কোড অপরিবর্তিত)
 devices = load_devices_from_github() or {
     "iPhone": [
         {"model": "iPhone16,1", "name": "iPhone 15 Pro", "os": "iOS 17.1"},
         {"model": "iPhone15,5", "name": "iPhone 14 Pro Max", "os": "iOS 16.6"},
-        {"model": "iPhone14,5", "name": "iPhone 13", "os": "iOS 16.5"}
+        {"model": "iPhone14,5", "name": "iPhone 13", "os": "iOS 16.5"},
+        {"model": "iPhone14,6", "name": "iPhone SE (2022)", "os": "iOS 15/16/17"},
+        {"model": "iPhone13,1", "name": "iPhone 12 mini", "os": "iOS 14/15/16"},
+        {"model": "iPhone11,8", "name": "iPhone XR", "os": "iOS 12/13/14/15"}
     ],
     "Android": [
         {"model": "SM-S918U", "name": "Galaxy S23 Ultra", "os": "Android 13"},
@@ -28,7 +32,18 @@ devices = load_devices_from_github() or {
         {"model": "Pixel 7a", "name": "Pixel 7a", "os": "Android 13"},
         {"model": "XT2315-4", "name": "Moto G Power 5G", "os": "Android 13"},
         {"model": "CPH2451", "name": "OnePlus 11 5G", "os": "Android 13"},
-        {"model": "LM-G900TM", "name": "LG Velvet 5G", "os": "Android 12"}
+        {"model": "LM-G900TM", "name": "LG Velvet 5G", "os": "Android 12"},
+        {"model": "SM-S906U", "name": "Galaxy S22+", "os": "Android 12/13"},
+        {"model": "SM-A236U", "name": "Galaxy A23 5G", "os": "Android 12/13"},
+        {"model": "SM-F936U", "name": "Galaxy Z Fold 4", "os": "Android 12/13"},
+        {"model": "GB17L", "name": "Pixel 6a", "os": "Android 12/13"},
+        {"model": "GD1YQ", "name": "Pixel 5", "os": "Android 11/12"},
+        {"model": "BE2028", "name": "OnePlus Nord N20 5G", "os": "Android 11/12"},
+        {"model": "LE2125", "name": "OnePlus 9 Pro", "os": "Android 11/12"},
+        {"model": "XT2213-2", "name": "Moto G 5G (2023)", "os": "Android 12/13"},
+        {"model": "XT2205-2", "name": "Moto Edge (2022)", "os": "Android 12"},
+        {"model": "T817S", "name": "TCL 30 XE 5G", "os": "Android 12"},
+        {"model": "TA-1390", "name": "Nokia X100", "os": "Android 11"}
     ]
 }
 
