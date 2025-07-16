@@ -15,7 +15,7 @@ jobs:
 
       - name: Generate UA Data
         run: |
-          # তোমার Python স্ক্রিপ্ট রান করবে (সমস্ত ১১ ডিভাইস ব্যবহার করে)
+          # Python স্ক্রিপ্ট রান করবে (সমস্ত ২৫ ডিভাইস ব্যবহার করে)
           python3 new_user.py > ua_data.json
 
       - name: Commit Changes
