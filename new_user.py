@@ -14,8 +14,8 @@ def load_devices_from_github():
         pass
     return None
 
-# 🔥 এখানে শুধু ডিভাইস লিস্ট আপডেট করেছি (বাকি কোড অপরিবর্তিত)
-devices = load_devices_from_github() or {
+# তোমার দেওয়া সমস্ত ডিভাইস (১৪+১১=২৫টি)
+devices_local_data = {
     "iPhone": [
         {"model": "iPhone16,1", "name": "iPhone 15 Pro", "os": "iOS 17.1"},
         {"model": "iPhone15,5", "name": "iPhone 14 Pro Max", "os": "iOS 16.6"},
@@ -47,6 +47,9 @@ devices = load_devices_from_github() or {
     ]
 }
 
+# GitHub থেকে ডাটা লোড (ফেল করলে লোকাল ডাটা ব্যবহার)
+devices = load_devices_from_github() or devices_local_data
+
 def generate_iphone_ua(device):
     ios_main = random.randint(15, 17)
     ios_sub = random.randint(0, 5)
@@ -76,17 +79,14 @@ def get_daily_user_agents(user_secret="Fahim_123_@", num=500):
     random.shuffle(all_devices)
     
     ua_list = []
-    while len(ua_list) < num:
-        for device in all_devices:
-            ua = generate_iphone_ua(device) if "iPhone" in device["name"] else generate_android_ua(device)
-            if ua not in ua_list:
-                ua_list.append(ua)
-                if len(ua_list) == num:
-                    break
+    for _ in range(num):
+        device = random.choice(all_devices)
+        ua = generate_iphone_ua(device) if "iPhone" in device["name"] else generate_android_ua(device)
+        ua_list.append(ua)
     return ua_list
 
 if __name__ == "__main__":
     print("=" * 50)
-    print("আজকের ৫০০টি ইউনিক UA (GitHub থেকে ডিভাইস আপডেট সহ):")
+    print("আজকের ৫০০টি ইউনিক UA (নতুন ডিভাইস সহ):")
     print("=" * 50)
     print("\n".join(get_daily_user_agents()))
