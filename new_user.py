@@ -1,21 +1,8 @@
 import random
 from datetime import datetime
 import hashlib
-import requests
-import json
 
-def load_devices_from_github():
-    try:
-        url = "https://raw.githubusercontent.com/yourusername/devices/main/devices.json"
-        response = requests.get(url, timeout=5)
-        if response.status_code == 200:
-            return json.loads(response.text)
-    except:
-        pass
-    return None
-
-# তোমার দেওয়া সমস্ত ডিভাইস (১৪+১১=২৫টি)
-devices_local_data = {
+devices = {
     "iPhone": [
         {"model": "iPhone16,1", "name": "iPhone 15 Pro", "os": "iOS 17.1"},
         {"model": "iPhone15,5", "name": "iPhone 14 Pro Max", "os": "iOS 16.6"},
@@ -47,27 +34,41 @@ devices_local_data = {
     ]
 }
 
-# GitHub থেকে ডাটা লোড (ফেল করলে লোকাল ডাটা ব্যবহার)
-devices = load_devices_from_github() or devices_local_data
-
 def generate_iphone_ua(device):
     ios_main = random.randint(15, 17)
     ios_sub = random.randint(0, 5)
     webkit = f"{random.randint(600, 615)}.1.{random.randint(10, 50)}"
     mobile_id = f"15E{random.randint(100, 500)}"
-    return (
-        f"Mozilla/5.0 ({device['model']}; CPU iPhone OS {ios_main}_{ios_sub} like Mac OS X) "
-        f"AppleWebKit/{webkit} (KHTML, like Gecko) "
-        f"Version/{ios_main}.{ios_sub} Mobile/{mobile_id} Safari/{webkit}"
-    )
+    
+    # Facebook App ভ্যারিয়েশন (70% চান্স)
+    if random.random() < 0.7:
+        fb_version = f"{random.randint(400, 500)}.0.0.{random.randint(10, 100)}"
+        fb_build = f"{random.randint(100000, 999999)}"
+        return (f"Mozilla/5.0 ({device['model']}; CPU iPhone OS {ios_main}_{ios_sub} like Mac OS X) "
+                f"AppleWebKit/{webkit} (KHTML, like Gecko) "
+                f"Mobile/{mobile_id} [FBAN/FBIOS;FBAV/{fb_version};FBBV/{fb_build};FBLC/en_US;]")
+    # Chrome ভার্সন (30% চান্স)
+    else:
+        return (f"Mozilla/5.0 ({device['model']}; CPU iPhone OS {ios_main}_{ios_sub} like Mac OS X) "
+                f"AppleWebKit/{webkit} (KHTML, like Gecko) "
+                f"Version/{ios_main}.{ios_sub} Mobile/{mobile_id} Safari/{webkit}")
 
 def generate_android_ua(device):
     chrome_ver = f"{random.randint(130, 137)}.0.{random.randint(1000, 9999)}.{random.randint(50, 200)}"
-    return (
-        f"Mozilla/5.0 (Linux; Android {device['os']}; {device['model']}) "
-        f"AppleWebKit/537.36 (KHTML, like Gecko) "
-        f"Chrome/{chrome_ver} Mobile Safari/537.36"
-    )
+    
+    # Facebook App ভ্যারিয়েশন (70% চান্স)
+    if random.random() < 0.7:
+        fb_version = f"{random.randint(400, 500)}.0.0.{random.randint(10, 100)}"
+        fb_build = f"{random.randint(100000, 999999)}"
+        return (f"Mozilla/5.0 (Linux; Android {device['os']}; {device['model']}) "
+                f"AppleWebKit/537.36 (KHTML, like Gecko) "
+                f"Chrome/{chrome_ver} Mobile Safari/537.36 "
+                f"[FB_IAB/FB4A;FBAV/{fb_version};FBBV/{fb_build};FBDM/{{density=2.5,width=1080,height=1920}};FBLC/en_US;]")
+    # Chrome ভার্সন (30% চান্স)
+    else:
+        return (f"Mozilla/5.0 (Linux; Android {device['os']}; {device['model']}) "
+                f"AppleWebKit/537.36 (KHTML, like Gecko) "
+                f"Chrome/{chrome_ver} Mobile Safari/537.36")
 
 def get_daily_user_agents(user_secret="Fahim_123_@", num=500):
     today = datetime.now().strftime("%Y%m%d")
@@ -87,6 +88,6 @@ def get_daily_user_agents(user_secret="Fahim_123_@", num=500):
 
 if __name__ == "__main__":
     print("=" * 50)
-    print("আজকের ৫০০টি ইউনিক UA (নতুন ডিভাইস সহ):")
+    print("আজকের ৫০০টি ইউনিক UA (Facebook 70%, Chrome 30%):")
     print("=" * 50)
     print("\n".join(get_daily_user_agents()))
