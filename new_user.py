@@ -2,6 +2,7 @@ import random
 from datetime import datetime
 import hashlib
 
+# আপনার মূল ডিভাইস ডাটা (অপরিবর্তিত)
 devices = {
     "iPhone": [
         {"model": "iPhone16,1", "name": "iPhone 15 Pro", "os": "iOS 17.1"},
@@ -34,6 +35,27 @@ devices = {
     ]
 }
 
+# রিয়েলিস্টিক Facebook ভার্সন (আপনার স্ক্রিনশট অনুযায়ী)
+FB_VERSIONS = {
+    "Android": [
+        {"version": "521.0.0.42.97", "build": "123456789"},
+        {"version": "520.0.0.41.96", "build": "123456788"},
+        {"version": "519.0.0.40.95", "build": "123456787"}
+    ],
+    "iOS": [
+        {"version": "445.0.0.55.123", "build": "112345682"},
+        {"version": "440.0.0.50.122", "build": "112345681"}
+    ]
+}
+
+# রিয়েলিস্টিক Chrome ভার্সন (আপনার স্ক্রিনশট অনুযায়ী)
+CHROME_VERSIONS = [
+    "138.0.7204.63",  # আপনার স্ক্রিনশটে দেখানো ভার্সন
+    "139.0.7215.64",
+    "140.0.7226.65",
+    "137.0.6987.99"
+]
+
 def generate_iphone_ua(device):
     ios_main = random.randint(15, 17)
     ios_sub = random.randint(0, 5)
@@ -42,28 +64,28 @@ def generate_iphone_ua(device):
     
     # Facebook App ভ্যারিয়েশন (70% চান্স)
     if random.random() < 0.7:
-        fb_version = f"{random.randint(400, 500)}.0.0.{random.randint(10, 100)}"
-        fb_build = f"{random.randint(100000, 999999)}"
+        fb_data = random.choice(FB_VERSIONS["iOS"])
         return (f"Mozilla/5.0 ({device['model']}; CPU iPhone OS {ios_main}_{ios_sub} like Mac OS X) "
                 f"AppleWebKit/{webkit} (KHTML, like Gecko) "
-                f"Mobile/{mobile_id} [FBAN/FBIOS;FBAV/{fb_version};FBBV/{fb_build};FBLC/en_US;]")
+                f"Mobile/{mobile_id} [FBAN/FBIOS;FBAV/{fb_data['version']};FBBV/{fb_data['build']};FBLC/en_US;]")
     # Chrome ভার্সন (30% চান্স)
     else:
+        chrome_ver = random.choice(CHROME_VERSIONS)
         return (f"Mozilla/5.0 ({device['model']}; CPU iPhone OS {ios_main}_{ios_sub} like Mac OS X) "
                 f"AppleWebKit/{webkit} (KHTML, like Gecko) "
                 f"Version/{ios_main}.{ios_sub} Mobile/{mobile_id} Safari/{webkit}")
 
 def generate_android_ua(device):
-    chrome_ver = f"{random.randint(130, 137)}.0.{random.randint(1000, 9999)}.{random.randint(50, 200)}"
+    chrome_ver = random.choice(CHROME_VERSIONS)
     
     # Facebook App ভ্যারিয়েশন (70% চান্স)
     if random.random() < 0.7:
-        fb_version = f"{random.randint(400, 500)}.0.0.{random.randint(10, 100)}"
-        fb_build = f"{random.randint(100000, 999999)}"
+        fb_data = random.choice(FB_VERSIONS["Android"])
         return (f"Mozilla/5.0 (Linux; Android {device['os']}; {device['model']}) "
                 f"AppleWebKit/537.36 (KHTML, like Gecko) "
                 f"Chrome/{chrome_ver} Mobile Safari/537.36 "
-                f"[FB_IAB/FB4A;FBAV/{fb_version};FBBV/{fb_build};FBDM/{{density=2.5,width=1080,height=1920}};FBLC/en_US;]")
+                f"[FB_IAB/FB4A;FBAV/{fb_data['version']};FBBV/{fb_data['build']};"
+                f"FBDM/{{density=2.5,width=1080,height=1920}};FBLC/en_US;]")
     # Chrome ভার্সন (30% চান্স)
     else:
         return (f"Mozilla/5.0 (Linux; Android {device['os']}; {device['model']}) "
