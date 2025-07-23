@@ -1,27 +1,25 @@
-name: UA Auto-Updater
+name: Auto UA Generator
 on:
-  workflow_dispatch:  # ম্যানুয়াল রানের জন্য
   schedule:
-    - cron: '0 12 * * *'  # দৈনিক বাংলাদেশ সময় ১২টায়
+    - cron: '0 0 * * *'  # প্রতিদিন 12AM বাংলাদেশ সময়
+  workflow_dispatch:  # ম্যানুয়ালি রান করার অপশন
 
 jobs:
-  update:
+  generate:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write  # রিপোজিটরিতে লিখার পারমিশন
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Generate UA Data
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Run UA Generator
         run: |
-          # Python স্ক্রিপ্ট রান করবে (সমস্ত ২৫ ডিভাইস ব্যবহার করে)
-          python3 new_user.py > ua_data.json
-
-      - name: Commit Changes
-        run: |
+          python ua_generator.py
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add .
-          git commit -m "Auto-update UA: $(date +'%d-%m-%Y %H:%M')"
+          git add ua_*.json
+          git commit -m "Auto: Daily UA Update [$(date +'%d-%m-%Y')]"
           git push
