@@ -1,8 +1,9 @@
 import random
 from datetime import datetime
 import hashlib
+import json
 
-# আপনার মূল ডিভাইস ডাটা (অপরিবর্তিত)
+# আপনার দেওয়া ডিভাইস লিস্ট (বিস্তারিত ভাবে রাখলাম)
 devices = {
     "iPhone": [
         {"model": "iPhone16,1", "name": "iPhone 15 Pro", "os": "iOS 17.1"},
@@ -35,81 +36,48 @@ devices = {
     ]
 }
 
-# রিয়েলিস্টিক Facebook ভার্সন (আপনার স্ক্রিনশট অনুযায়ী)
-FB_VERSIONS = {
-    "Android": [
-        {"version": "521.0.0.42.97", "build": "123456789"},
-        {"version": "520.0.0.41.96", "build": "123456788"},
-        {"version": "519.0.0.40.95", "build": "123456787"}
-    ],
-    "iOS": [
-        {"version": "445.0.0.55.123", "build": "112345682"},
-        {"version": "440.0.0.50.122", "build": "112345681"}
-    ]
-}
+def generate_unique_seed(user_id):
+    """ইউনিক সিড জেনারেটর (ইউজার আইডি + তারিখ)"""
+    today = datetime.now().strftime("%Y%m%d")
+    combined = f"{today}_{user_id}"
+    return int(hashlib.sha256(combined.encode()).hexdigest(), 16)
 
-# রিয়েলিস্টিক Chrome ভার্সন (আপনার স্ক্রিনশট অনুযায়ী)
-CHROME_VERSIONS = [
-    "138.0.7204.63",  # আপনার স্ক্রিনশটে দেখানো ভার্সন
-    "139.0.7215.64",
-    "140.0.7226.65",
-    "137.0.6987.99"
-]
-
-def generate_iphone_ua(device):
-    ios_main = random.randint(15, 17)
-    ios_sub = random.randint(0, 5)
-    webkit = f"{random.randint(600, 615)}.1.{random.randint(10, 50)}"
-    mobile_id = f"15E{random.randint(100, 500)}"
-    
-    # Facebook App ভ্যারিয়েশন (70% চান্স)
-    if random.random() < 0.7:
-        fb_data = random.choice(FB_VERSIONS["iOS"])
-        return (f"Mozilla/5.0 ({device['model']}; CPU iPhone OS {ios_main}_{ios_sub} like Mac OS X) "
-                f"AppleWebKit/{webkit} (KHTML, like Gecko) "
-                f"Mobile/{mobile_id} [FBAN/FBIOS;FBAV/{fb_data['version']};FBBV/{fb_data['build']};FBLC/en_US;]")
-    # Chrome ভার্সন (30% চান্স)
+def generate_ua(device):
+    """ডিভাইস অনুযায়ী ইউজার এজেন্ট জেনারেটর"""
+    if "iPhone" in device["name"]:
+        ios_ver = f"{random.randint(15, 17)}_{random.randint(0, 5)}"
+        webkit = f"{random.randint(600, 615)}.1.{random.randint(10, 50)}"
+        return (f"Mozilla/5.0 ({device['model']}; CPU iPhone OS {ios_ver} like Mac OS X) "
+                f"AppleWebKit/{webkit} (KHTML, like Gecko) Mobile/15E{random.randint(100, 500)} Safari/{webkit}")
     else:
-        chrome_ver = random.choice(CHROME_VERSIONS)
-        return (f"Mozilla/5.0 ({device['model']}; CPU iPhone OS {ios_main}_{ios_sub} like Mac OS X) "
-                f"AppleWebKit/{webkit} (KHTML, like Gecko) "
-                f"Version/{ios_main}.{ios_sub} Mobile/{mobile_id} Safari/{webkit}")
-
-def generate_android_ua(device):
-    chrome_ver = random.choice(CHROME_VERSIONS)
-    
-    # Facebook App ভ্যারিয়েশন (70% চান্স)
-    if random.random() < 0.7:
-        fb_data = random.choice(FB_VERSIONS["Android"])
-        return (f"Mozilla/5.0 (Linux; Android {device['os']}; {device['model']}) "
-                f"AppleWebKit/537.36 (KHTML, like Gecko) "
-                f"Chrome/{chrome_ver} Mobile Safari/537.36 "
-                f"[FB_IAB/FB4A;FBAV/{fb_data['version']};FBBV/{fb_data['build']};"
-                f"FBDM/{{density=2.5,width=1080,height=1920}};FBLC/en_US;]")
-    # Chrome ভার্সন (30% চান্স)
-    else:
-        return (f"Mozilla/5.0 (Linux; Android {device['os']}; {device['model']}) "
+        android_ver = device['os'].split('/')[0]  # প্রথম ভার্সন নেয়া (Android 12/13 → 12)
+        chrome_ver = f"{random.randint(100, 140)}.0.{random.randint(6000, 7000)}.{random.randint(50, 100)}"
+        return (f"Mozilla/5.0 (Linux; Android {android_ver}; {device['model']}) "
                 f"AppleWebKit/537.36 (KHTML, like Gecko) "
                 f"Chrome/{chrome_ver} Mobile Safari/537.36")
 
-def get_daily_user_agents(user_secret="Fahim_123_@", num=500):
-    today = datetime.now().strftime("%Y%m%d")
-    combined_seed = today + user_secret + str(random.randint(1000, 9999))
-    seed_hash = int(hashlib.sha256(combined_seed.encode()).hexdigest(), 16)
-    random.seed(seed_hash)
+def get_daily_ua(user_id="Fahim_123", num=500):
+    """প্রতিদিনের জন্য ইউনিক UA লিস্ট"""
+    random.seed(generate_unique_seed(user_id))
+    ua_set = set()
     
-    all_devices = devices["iPhone"] + devices["Android"]
-    random.shuffle(all_devices)
+    while len(ua_set) < num:
+        device = random.choice(devices["iPhone"] + devices["Android"])
+        ua = generate_ua(device)
+        ua_set.add(ua)
     
-    ua_list = []
-    for _ in range(num):
-        device = random.choice(all_devices)
-        ua = generate_iphone_ua(device) if "iPhone" in device["name"] else generate_android_ua(device)
-        ua_list.append(ua)
-    return ua_list
+    return list(ua_set)
 
 if __name__ == "__main__":
-    print("=" * 50)
-    print("আজকের ৫০০টি ইউনিক UA (Facebook 70%, Chrome 30%):")
-    print("=" * 50)
-    print("\n".join(get_daily_user_agents()))
+    USER_ID = "Fahim_123"  # আপনার ইউনিক আইডি
+    ua_list = get_daily_ua(USER_ID)
+    
+    print("="*50)
+    print(f"আজকের জন্য {len(ua_list)}টি ইউনিক UA:")
+    print("="*50)
+    print("\n".join(ua_list[:5]))  # শুধু প্রথম ৫টি দেখাবে
+    
+    # JSON ফাইলে সেভ
+    today = datetime.now().strftime("%Y%m%d")
+    with open(f"ua_{USER_ID}_{today}.json", "w") as f:
+        json.dump({"user_agents": ua_list}, f, indent=2)
