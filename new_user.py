@@ -69,7 +69,7 @@ def get_unique_ua_list(user_id, count=500):
 
 if __name__ == "__main__":
     # ইউনিক আইডি (পরিবর্তন করলে নতুন UA পাবেন)
-    USER_ID = "Your_Unique_ID_123"  # এখানে আপনার আইডি দিন
+    USER_ID = "Fuck_you_beby"  # এখানে আপনার আইডি দিন
     
     # ৫০০টি ইউনিক UA জেনারেট
     ua_list = get_unique_ua_list(USER_ID)
