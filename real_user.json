@@ -36,8 +36,8 @@
       "max": 615
     },
     "android_chrome_versions": {
-      "major_min": 100,
-      "major_max": 140,
+      "major_min": 131,
+      "major_max": 138,
       "build_min": 6000,
       "build_max": 7000,
       "patch_min": 50,
