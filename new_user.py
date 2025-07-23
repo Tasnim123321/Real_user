@@ -74,16 +74,5 @@ if __name__ == "__main__":
     # ৫০০টি ইউনিক UA জেনারেট
     ua_list = get_unique_ua_list(USER_ID)
     
-    # JSON ফাইলে অটো সেভ
-    output = {
-        "user_id": USER_ID,
-        "date": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
-        "total_ua": len(ua_list),
-        "user_agents": ua_list
-    }
-    
-    filename = f"ua_{datetime.now():%Y%m%d}.json"
-    with open(filename, 'w', encoding='utf-8') as f:
-        json.dump(output, f, indent=2, ensure_ascii=False)
-    
-    print(f"✅ {len(ua_list)}টি ইউনিক UA জেনারেট হয়ে '{filename}' ফাইলে সেভ হয়েছে!")
+    # সরাসরি টার্মিনালে প্রিন্ট (কোনো JSON ফাইল তৈরি হবে না)
+    print("\n".join(ua_list))
