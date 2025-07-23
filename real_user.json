@@ -30,21 +30,18 @@
       {"model": "TA-1390", "name": "Nokia X100", "os": "Android 11"}
     ]
   },
-  "FB_VERSIONS": {
-    "Android": [
-      {"version": "521.0.0.42.97", "build": "123456789"},
-      {"version": "520.0.0.41.96", "build": "123456788"},
-      {"version": "519.0.0.40.95", "build": "123456787"}
-    ],
-    "iOS": [
-      {"version": "445.0.0.55.123", "build": "112345682"},
-      {"version": "440.0.0.50.122", "build": "112345681"}
-    ]
-  },
-  "CHROME_VERSIONS": [
-    "138.0.7204.63",
-    "139.0.7215.64",
-    "140.0.7226.65",
-    "137.0.6987.99"
-  ]
+  "UA_SETTINGS": {
+    "ios_webkit_versions": {
+      "min": 600,
+      "max": 615
+    },
+    "android_chrome_versions": {
+      "major_min": 100,
+      "major_max": 140,
+      "build_min": 6000,
+      "build_max": 7000,
+      "patch_min": 50,
+      "patch_max": 100
+    }
+  }
 }
